@@ -32,7 +32,8 @@ export const revalidate = 0;
 export default async function page() {
 	const { vehicles } = await getVehicles();
 	const poolVehicles = vehicles.filter(
-		(vehicle) => vehicle.vehicleType === 'vehiclePool'
+		(vehicle) =>
+			vehicle.vehicleType === 'vehiclePool' && vehicle.inUse === false
 	);
 	const { transactions } = await getTransactions();
 	// console.log(transactions, 'OVIE');
@@ -46,7 +47,6 @@ export default async function page() {
 			<hr />
 			<br />
 			<RentedVehicle transactions={transactions} />
-			{/* <VehicleForm transactions={transactions} /> */}
 		</main>
 	);
 }

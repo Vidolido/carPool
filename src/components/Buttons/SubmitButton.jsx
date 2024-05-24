@@ -2,13 +2,18 @@
 import { useFormStatus } from 'react-dom';
 import { useVehicleContext } from '@/state/errorState/vehicleContext';
 import { getTransactionsByDate } from '@/serverActions/vehicles';
+import { useEffect } from 'react';
 
 const SubmitButton = ({ label, element }) => {
 	const { pending } = useFormStatus();
 
 	const { setState } = useVehicleContext();
 
-	// console.log(state, 'the STATE');
+	useEffect(() => {
+		setState((prevState) => {
+			return { ...prevState, error: '' };
+		});
+	}, [element, setState]);
 
 	const handleClick = async (e) => {
 		const checkValue = e.target.form.elements?.namedItem(element)

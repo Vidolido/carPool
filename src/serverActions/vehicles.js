@@ -65,6 +65,10 @@ export async function rentVehicle(formData) {
 			return;
 			// return { error: 'Please choose a user.' };
 		} else {
+			await Vehicle.updateOne(
+				{ _id: payload.vehicle },
+				{ user: payload.user, inUse: true }
+			);
 			await Transaction.create(payload);
 			revalidatePath('/', 'page');
 		}
@@ -74,12 +78,13 @@ export async function rentVehicle(formData) {
 	}
 }
 
-export const returnVehicle = async (data) => {
-	// console.log(data);
+export const returnVehicle = async (transactionId, vehicleId) => {
+	console.log(transactionId, vehicleId, 'the transactionId, vehicleId');
 	try {
 		await dbConnect();
+		await Vehicle.updateOne({ _id: vehicleId }, { user: 'none', inUse: false });
 		await Transaction.updateOne(
-			{ _id: data },
+			{ _id: transactionId },
 			{ status: 'complete', returnTime: new Date() }
 		);
 		revalidatePath('/', 'page');
