@@ -82,7 +82,7 @@ export default async function page() {
 				users={users}
 				locations={locations}
 			/>
-			<VehicleError />
+			<VehicleError errorFrom='useVehicle' />
 			<MakeReservation
 				vehicles={reservationVehicles}
 				users={users}

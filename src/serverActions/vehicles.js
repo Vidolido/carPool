@@ -96,8 +96,7 @@ export const returnVehicle = async (transactionId, vehicleId) => {
 
 export const makeReservation = async (formData) => {
 	// Ова ќе треба да се усогласи со серверот.
-	console.log(formData);
-	console.log();
+	// console.log(formData);
 	let setTimeDate = new Date();
 	setTimeDate.setHours(
 		Number(formData.get('hour')),
@@ -105,7 +104,7 @@ export const makeReservation = async (formData) => {
 	);
 	// setTimeDate.setMinutes(formData.get('minutes'));
 
-	console.log(setTimeDate);
+	// console.log(setTimeDate);
 	const payload = {
 		user: formData.get('userId'),
 		vehicle: formData.get('vehicleId'),
@@ -113,7 +112,7 @@ export const makeReservation = async (formData) => {
 		date: setTimeDate,
 		status: 'reserved',
 	};
-	console.log(payload, 'the pay');
+	// console.log(payload, 'the pay');
 	if (payload.user === 'none') {
 		// console.log('IT IS');
 		return;
@@ -124,6 +123,56 @@ export const makeReservation = async (formData) => {
 		revalidatePath('/', 'page');
 	} catch (error) {
 		console.log('makeReservation error:', error);
+		throw Error('Could not insert transaction to database: ' + error);
+	}
+};
+
+export const confirmReservation = async (data) => {
+	console.log(data, 'confirmReservation data');
+	const { transaction, vehicle } = data;
+	try {
+		await dbConnect();
+		const alreadyInUse = await Transaction.findOne({
+			vehicle,
+			status: 'pending',
+		});
+		// console.log(alreadyInUse, 'USEEEE');
+		if (!alreadyInUse) {
+			await Transaction.updateOne(
+				{ _id: transaction },
+				{ rentTime: new Date(), status: 'pending' }
+			);
+			revalidatePath('/', 'page');
+			return {
+				error: {
+					confirmReservation: '',
+				},
+			};
+		} else {
+			return {
+				error: {
+					confirmReservation: 'Vehicle already in use.',
+				},
+			};
+		}
+	} catch (error) {
+		console.log('confirmReservation error:', error);
+		throw Error('Could not insert transaction to database: ' + error);
+	}
+};
+
+export const cancelReservation = async (data) => {
+	try {
+		await dbConnect();
+		await Transaction.updateOne({ _id: data }, { status: 'canceled' });
+		revalidatePath('/', 'page');
+		return {
+			error: {
+				cancelReservation: '',
+			},
+		};
+	} catch (error) {
+		console.log('cancelReservation error:', error);
 		throw Error('Could not insert transaction to database: ' + error);
 	}
 };

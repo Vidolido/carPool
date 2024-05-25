@@ -1,30 +1,47 @@
+// server actions
+import {
+	confirmReservation,
+	cancelReservation,
+} from '@/serverActions/vehicles';
+
+// components
+import ActionButton from '../Buttons/ActionButton';
+import VehicleError from '../Errors/VehicleError';
+
 const ReservedVehicle = ({ transactions }) => {
 	// console.log(transactions, 'The transactions');
 	return (
 		<div>
 			<h2>Reserved Vehicles</h2>
-			{transactions?.map((transaction) => {
-				return (
-					<div key={transaction._id} className='flex gap-4'>
-						<p>{transaction.vehicle.plates}</p>
-						<p>{transaction.user}</p>
-						<p>{transaction.location}</p>
-						<p>{transaction.rentTime}</p>
-						<p>{new Date(transaction.date).toLocaleTimeString()}</p>
-						{/* <button
-								type='button'
-								className='bg-red-500 disabled:bg-red-200 hover:bg-red-700 text-white font-semibold pt-[1px] pb-[3px] px-5 rounded'
-								onClick={async () => {
-									await returnVehicle(
-										transaction._id,
-										transaction?.vehicle._id
-									);
-								}}>
-								Return
-							</button> */}
-					</div>
-				);
-			})}
+			<div>
+				{transactions?.map((transaction) => {
+					return (
+						<div
+							key={transaction._id}
+							className='flex justify-between w-1/2 my-2'>
+							<p>{transaction.vehicle.plates}</p>
+							<p>{transaction.user}</p>
+							<p>{transaction.location}</p>
+							<p>{transaction.rentTime}</p>
+							<p>{new Date(transaction.date).toLocaleTimeString()}</p>
+							<ActionButton
+								label='Confirm'
+								action={confirmReservation}
+								parameters={{
+									transaction: transaction._id,
+									vehicle: transaction.vehicle._id,
+								}}
+							/>
+							<ActionButton
+								label='Cancel'
+								action={cancelReservation}
+								parameters={transaction._id}
+							/>
+						</div>
+					);
+				})}
+			</div>
+			<VehicleError errorFrom='confirmReservation' />
 		</div>
 	);
 };

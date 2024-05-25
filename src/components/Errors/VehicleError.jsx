@@ -1,10 +1,10 @@
 'use client';
 import { useVehicleContext } from '@/state/errorState/vehicleContext';
 
-const VehicleError = () => {
+const VehicleError = ({ errorFrom }) => {
 	const { state } = useVehicleContext();
 
-	return <div>{state.error}</div>;
+	return <div>{state.error[errorFrom]}</div>;
 };
 
 export default VehicleError;

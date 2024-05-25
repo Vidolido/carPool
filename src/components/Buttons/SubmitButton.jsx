@@ -10,25 +10,15 @@ import { useEffect } from 'react';
 const SubmitButton = ({ label, element }) => {
 	const { pending } = useFormStatus();
 
-	const { setState } = useVehicleContext();
+	const { state, setState } = useVehicleContext();
 
 	useEffect(() => {
-		setState((prevState) => {
-			return {
-				...prevState,
-				error: '',
-				reservationError: '',
-				profile: {
-					transactions: [],
-				},
-			};
+		setState({
+			error: {},
+			profile: {
+				transactions: [],
+			},
 		});
-		// setState({
-		// 	error: '',
-		// 	profile: {
-		// 		transactions: [],
-		// 	}
-		// })
 	}, [element, setState]);
 
 	const handleClick = async (e) => {
@@ -38,7 +28,7 @@ const SubmitButton = ({ label, element }) => {
 
 		if (checkValue === null) {
 			setState((prevState) => {
-				return { ...prevState, error: '', reservationError: '' };
+				return { ...prevState, error: {} };
 			});
 			e.target.form.requestSubmit();
 			return;
@@ -51,31 +41,46 @@ const SubmitButton = ({ label, element }) => {
 			if (checkValue.value === 'none') {
 				setState((prevState) => {
 					if (label === 'Reserve') {
-						return { ...prevState, reservationError: 'Please select a user.' };
+						return {
+							...prevState,
+							error: {
+								...prevState.error,
+								reservationError: 'Please select a user.',
+							},
+						};
 					} else {
-						return { ...prevState, error: 'Please select a user.' };
+						return {
+							...prevState,
+							error: {
+								...prevState.error,
+								useVehicle: 'Please select a user.',
+							},
+						};
 					}
 				});
 				return;
 			}
 
+			// Ова да го поправам
 			const hasUserRented = JSON.parse(
 				await checkIfUserRented(checkValue.value)
 			);
+
 			if (hasUserRented) {
 				setState((prevState) => ({
 					...prevState,
-					error: 'You have already requested a vehicle for use.',
+					error: {
+						...prevState.error,
+						useVehicle: 'You have already requested a vehicle for use.',
+					},
 				}));
 			} else {
 				e.target.form.requestSubmit();
 				setState((prevState) => ({
 					...prevState,
-					error: '',
+					error: { ...prevState.error, useVehicle: '' },
 				}));
 			}
-
-			// console.log(hasUserRented, 'OVIE');
 		}
 
 		if (checkValue.name === 'from') {
@@ -111,6 +116,7 @@ const SubmitButton = ({ label, element }) => {
 			});
 		}
 	};
+	console.log(state, 'THE STATE');
 	return (
 		<button
 			className='bg-red-500 disabled:bg-red-200 hover:bg-red-700 text-white font-semibold pt-[1px] pb-[3px] px-5 rounded'

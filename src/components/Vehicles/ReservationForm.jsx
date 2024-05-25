@@ -1,6 +1,7 @@
 import { makeReservation } from '@/serverActions/vehicles';
 import SubmitButton from '../Buttons/SubmitButton';
 import ReservationError from '../Errors/ReservationError';
+import VehicleError from '../Errors/VehicleError';
 
 const hours = [
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
@@ -75,7 +76,8 @@ const ReservationForm = ({ vehicles, users, locations }) => {
 					</select>
 				</label>
 			</fieldset>
-			<ReservationError />
+			{/* <ReservationError /> */}
+			<VehicleError errorFrom='reservationError' />
 			<SubmitButton label={'Reserve'} element={'userId'} />
 		</form>
 	);
