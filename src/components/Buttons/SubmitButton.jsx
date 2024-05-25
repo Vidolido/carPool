@@ -1,7 +1,10 @@
 'use client';
 import { useFormStatus } from 'react-dom';
 import { useVehicleContext } from '@/state/errorState/vehicleContext';
-import { getTransactionsByDate } from '@/serverActions/vehicles';
+import {
+	checkIfUserRented,
+	getTransactionsByDate,
+} from '@/serverActions/vehicles';
 import { useEffect } from 'react';
 
 const SubmitButton = ({ label, element }) => {
@@ -11,8 +14,21 @@ const SubmitButton = ({ label, element }) => {
 
 	useEffect(() => {
 		setState((prevState) => {
-			return { ...prevState, error: '' };
+			return {
+				...prevState,
+				error: '',
+				reservationError: '',
+				profile: {
+					transactions: [],
+				},
+			};
 		});
+		// setState({
+		// 	error: '',
+		// 	profile: {
+		// 		transactions: [],
+		// 	}
+		// })
 	}, [element, setState]);
 
 	const handleClick = async (e) => {
@@ -21,17 +37,45 @@ const SubmitButton = ({ label, element }) => {
 			: null;
 
 		if (checkValue === null) {
-			e.target.form.requestSubmit();
 			setState((prevState) => {
-				return { ...prevState, error: '' };
+				return { ...prevState, error: '', reservationError: '' };
 			});
+			e.target.form.requestSubmit();
+			return;
 		}
 
-		if (checkValue.value === 'none') {
+		if (checkValue.name === 'userId') {
 			e.preventDefault();
-			setState((prevState) => {
-				return { ...prevState, error: 'Please select a user.' };
-			});
+			console.log(label);
+			// let error = label !== 'Use' ?
+			if (checkValue.value === 'none') {
+				setState((prevState) => {
+					if (label === 'Reserve') {
+						return { ...prevState, reservationError: 'Please select a user.' };
+					} else {
+						return { ...prevState, error: 'Please select a user.' };
+					}
+				});
+				return;
+			}
+
+			const hasUserRented = JSON.parse(
+				await checkIfUserRented(checkValue.value)
+			);
+			if (hasUserRented) {
+				setState((prevState) => ({
+					...prevState,
+					error: 'You have already requested a vehicle for use.',
+				}));
+			} else {
+				e.target.form.requestSubmit();
+				setState((prevState) => ({
+					...prevState,
+					error: '',
+				}));
+			}
+
+			// console.log(hasUserRented, 'OVIE');
 		}
 
 		if (checkValue.name === 'from') {
@@ -51,7 +95,9 @@ const SubmitButton = ({ label, element }) => {
 				return;
 			}
 			const to = e.target.form.elements?.namedItem('to').value;
-			console.log(from, to, 'OVA SEA');
+			console.log(new Date(from) > new Date(to));
+
+			// console.log(from, to, 'OVA SEA');
 			const transactions = JSON.parse(await getTransactionsByDate(from, to));
 			// console.log(transactions, 'transactions');
 			setState((prevState) => {
@@ -65,7 +111,6 @@ const SubmitButton = ({ label, element }) => {
 			});
 		}
 	};
-	console.log('BYPASS');
 	return (
 		<button
 			className='bg-red-500 disabled:bg-red-200 hover:bg-red-700 text-white font-semibold pt-[1px] pb-[3px] px-5 rounded'

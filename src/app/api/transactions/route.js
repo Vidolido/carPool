@@ -8,9 +8,7 @@ import Transaction from '@/db/models/Transaction';
 export async function GET() {
 	try {
 		await dbConnect();
-		const transactions = await Transaction.find({ status: 'pending' })
-			.populate('vehicle')
-			.exec();
+		const transactions = await Transaction.find().populate('vehicle').exec();
 		// console.log(transactionsOne, 'transactionOne');
 		// const transactions = await Transaction.find({ status: 'pending' });
 		return NextResponse.json({ transactions }, { status: 200 });

@@ -79,7 +79,7 @@ export async function rentVehicle(formData) {
 }
 
 export const returnVehicle = async (transactionId, vehicleId) => {
-	console.log(transactionId, vehicleId, 'the transactionId, vehicleId');
+	// console.log(transactionId, vehicleId, 'the transactionId, vehicleId');
 	try {
 		await dbConnect();
 		await Vehicle.updateOne({ _id: vehicleId }, { user: 'none', inUse: false });
@@ -90,6 +90,54 @@ export const returnVehicle = async (transactionId, vehicleId) => {
 		revalidatePath('/', 'page');
 	} catch (error) {
 		console.log('returnVehicle error:', error);
+		throw Error('Could not insert transaction to database: ' + error);
+	}
+};
+
+export const makeReservation = async (formData) => {
+	// Ова ќе треба да се усогласи со серверот.
+	console.log(formData);
+	console.log();
+	let setTimeDate = new Date();
+	setTimeDate.setHours(
+		Number(formData.get('hour')),
+		Number(formData.get('minutes'))
+	);
+	// setTimeDate.setMinutes(formData.get('minutes'));
+
+	console.log(setTimeDate);
+	const payload = {
+		user: formData.get('userId'),
+		vehicle: formData.get('vehicleId'),
+		location: formData.get('location'),
+		date: setTimeDate,
+		status: 'reserved',
+	};
+	console.log(payload, 'the pay');
+	if (payload.user === 'none') {
+		// console.log('IT IS');
+		return;
+		// return { error: 'Please choose a user.' };
+	}
+	try {
+		await Transaction.create(payload);
+		revalidatePath('/', 'page');
+	} catch (error) {
+		console.log('makeReservation error:', error);
+		throw Error('Could not insert transaction to database: ' + error);
+	}
+};
+
+export const checkIfUserRented = async (userId) => {
+	// console.log(userId);
+	try {
+		await dbConnect();
+		const user = await Transaction.find({ user: userId, status: 'pending' });
+		// console.log(user, 'THIS USER');
+		// return JSON.stringify(user);
+		return !user.length ? false : true;
+	} catch (error) {
+		console.log('Check if user has rented a vehicle error:', error);
 		throw Error('Could not insert transaction to database: ' + error);
 	}
 };

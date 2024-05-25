@@ -1,30 +1,30 @@
 import { rentVehicle } from '@/serverActions/vehicles';
 import SubmitButton from '../Buttons/SubmitButton';
 
-const users = [
-	{
-		id: 1,
-		name: 'Boshko Boshkovski',
-		workId: '2020',
-		vehicleId: '',
-	},
-	{
-		id: 2,
-		name: 'Vane Vanevski',
-		workId: '2021',
-		vehicleId: '',
-	},
-	{
-		id: 3,
-		name: 'Bekrija Delija',
-		workId: '2022',
-		vehicleId: '',
-	},
-];
+// const users = [
+// 	{
+// 		id: 1,
+// 		name: 'Boshko Boshkovski',
+// 		workId: '2020',
+// 		vehicleId: '',
+// 	},
+// 	{
+// 		id: 2,
+// 		name: 'Vane Vanevski',
+// 		workId: '2021',
+// 		vehicleId: '',
+// 	},
+// 	{
+// 		id: 3,
+// 		name: 'Bekrija Delija',
+// 		workId: '2022',
+// 		vehicleId: '',
+// 	},
+// ];
 
-const locations = ['Okta', 'Skopje', 'Kumanovo'];
+// const locations = ['Okta', 'Skopje', 'Kumanovo'];
 
-const VehiclePoolForm = ({ poolVehicles }) => {
+const VehiclePoolForm = ({ poolVehicles, users, locations }) => {
 	// console.log(poolVehicles.length);
 	return (
 		<form action={rentVehicle} className='flex gap-4'>

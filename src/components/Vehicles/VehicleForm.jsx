@@ -81,7 +81,7 @@ const VehicleForm = ({ vehicle }) => {
 						<input
 							type='checkbox'
 							name='inUse'
-							checked={vehicle ? vehicle?.inUse : false}
+							defaultChecked={vehicle ? vehicle?.inUse : false}
 							className='border-2 border-grey-50 border-opacity-60 rounded hover:border-red-200 focus:outline-none m-1'
 						/>
 					</label>

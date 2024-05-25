@@ -6,6 +6,7 @@ export const VehicleContext = createContext();
 export const VehicleContextProvider = ({ children }) => {
 	const [state, setState] = useState({
 		error: '',
+		reservationError: '',
 		profile: { dateSearch: [] },
 	});
 
