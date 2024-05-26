@@ -56,6 +56,8 @@ export const revalidate = 0;
 
 export default async function page() {
 	const { vehicles } = await getVehicles();
+	const { transactions } = await getTransactions();
+
 	const poolVehicles = vehicles.filter(
 		(vehicle) =>
 			vehicle.vehicleType === 'vehiclePool' && vehicle.inUse === false
@@ -63,8 +65,6 @@ export default async function page() {
 	const reservationVehicles = vehicles.filter(
 		(vehicle) => vehicle.vehicleType === 'vehiclePool'
 	);
-
-	const { transactions } = await getTransactions();
 
 	const pendingTransactions = transactions.filter(
 		(transaction) => transaction.status === 'pending'

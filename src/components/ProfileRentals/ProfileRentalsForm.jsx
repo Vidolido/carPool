@@ -26,7 +26,7 @@ const ProfileRentalsForm = () => {
 				/>
 				{/* <DateInput /> */}
 			</label>
-			<VehicleError />
+			<VehicleError errorFrom='profileTransactions' />
 			<SubmitButton label='Search' element='from' />
 		</form>
 	);

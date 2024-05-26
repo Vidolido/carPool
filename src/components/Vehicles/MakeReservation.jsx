@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import ReservationForm from './ReservationForm';
 
 const MakeReservation = ({ vehicles, users, locations }) => {
@@ -21,4 +21,4 @@ const MakeReservation = ({ vehicles, users, locations }) => {
 	);
 };
 
-export default MakeReservation;
+export default memo(MakeReservation);

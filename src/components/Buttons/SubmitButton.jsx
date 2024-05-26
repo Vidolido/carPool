@@ -91,7 +91,9 @@ const SubmitButton = ({ label, element }) => {
 				setState((prevState) => {
 					return {
 						...prevState,
-						error: 'Please enter a date.',
+						error: {
+							profileTransactions: 'Please enter a date.',
+						},
 						profile: {
 							transactions: [],
 						},
@@ -108,7 +110,9 @@ const SubmitButton = ({ label, element }) => {
 			setState((prevState) => {
 				return {
 					...prevState,
-					error: '',
+					error: {
+						profileTransactions: '',
+					},
 					profile: {
 						transactions,
 					},

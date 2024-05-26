@@ -128,7 +128,7 @@ export const makeReservation = async (formData) => {
 };
 
 export const confirmReservation = async (data) => {
-	console.log(data, 'confirmReservation data');
+	// console.log(data, 'confirmReservation data');
 	const { transaction, vehicle } = data;
 	try {
 		await dbConnect();
@@ -184,6 +184,8 @@ export const checkIfUserRented = async (userId) => {
 		const user = await Transaction.find({ user: userId, status: 'pending' });
 		// console.log(user, 'THIS USER');
 		// return JSON.stringify(user);
+		revalidatePath('/', 'page');
+
 		return !user.length ? false : true;
 	} catch (error) {
 		console.log('Check if user has rented a vehicle error:', error);
@@ -207,7 +209,9 @@ export const getTransactionsByDate = async (from, to) => {
 
 	try {
 		await dbConnect();
-		const transactions = await Transaction.find(payload);
+		const transactions = await Transaction.find(payload)
+			.populate('vehicle')
+			.exec();
 		return JSON.stringify(transactions);
 	} catch (error) {
 		console.log('returnVehicle error:', error);

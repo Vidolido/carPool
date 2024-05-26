@@ -11,7 +11,6 @@ export async function GET() {
 	try {
 		cookies();
 		await dbConnect();
-		// const cars = await Car.find({});
 		const vehicles = await Vehicle.find({});
 		revalidatePath('/');
 		return NextResponse.json({ vehicles }, { status: 200 });
