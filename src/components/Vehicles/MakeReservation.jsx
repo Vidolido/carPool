@@ -6,17 +6,23 @@ import ReservationForm from './ReservationForm';
 const MakeReservation = ({ vehicles, users, locations }) => {
 	const [showItems, setShowItems] = useState(false);
 	const handleClick = (e) => {
-		console.log(e);
+		e.preventDefault();
 		setShowItems(!showItems);
 	};
 	return (
 		<div>
-			<button onClick={handleClick}>Make a reservation</button>
-			<ReservationForm
-				vehicles={vehicles}
-				users={users}
-				locations={locations}
-			/>
+			<button type='button' onClick={handleClick}>
+				Make a reservation
+			</button>
+			{showItems ? (
+				<ReservationForm
+					vehicles={vehicles}
+					users={users}
+					locations={locations}
+				/>
+			) : (
+				''
+			)}
 		</div>
 	);
 };

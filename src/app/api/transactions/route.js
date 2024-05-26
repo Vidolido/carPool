@@ -12,10 +12,10 @@ export async function GET() {
 		// cookies();
 
 		await dbConnect();
-		// const transactions = await Transaction.find({}).populate('vehicle').exec();
+		const transactions = await Transaction.find({}).populate('vehicle').exec();
 		// revalidateTag('transactions');
 		// console.log
-		const transactions = await Transaction.find();
+		// const transactions = await Transaction.find();
 		// console.log(transactionsOne, 'transactionOne');
 		// const transactions = await Transaction.find({ status: 'pending' });
 		return NextResponse.json({ transactions }, { status: 200 });

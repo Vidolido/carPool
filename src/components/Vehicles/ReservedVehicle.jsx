@@ -12,7 +12,7 @@ const ReservedVehicle = ({ transactions }) => {
 	// console.log(transactions, 'The transactions');
 	return (
 		<div>
-			<h2>Reserved Vehicles</h2>
+			<h2 className='text-2xl font-semibold mb-4'>Reserved Vehicles</h2>
 			<div>
 				{transactions?.map((transaction) => {
 					return (

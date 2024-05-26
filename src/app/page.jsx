@@ -76,18 +76,22 @@ export default async function page() {
 	// console.log(reservedTransactions, 'OVIE');
 	return (
 		<main>
-			<h1>Available Vehicles</h1>
-			<VehiclePoolForm
-				poolVehicles={poolVehicles}
-				users={users}
-				locations={locations}
-			/>
-			<VehicleError errorFrom='useVehicle' />
-			<MakeReservation
-				vehicles={reservationVehicles}
-				users={users}
-				locations={locations}
-			/>
+			<div className='flex gap-20'>
+				<div>
+					<h1>Available Vehicles</h1>
+					<VehiclePoolForm
+						poolVehicles={poolVehicles}
+						users={users}
+						locations={locations}
+					/>
+				</div>
+				{/* <VehicleError errorFrom='useVehicle' /> */}
+				<MakeReservation
+					vehicles={reservationVehicles}
+					users={users}
+					locations={locations}
+				/>
+			</div>
 
 			<br />
 			<hr />

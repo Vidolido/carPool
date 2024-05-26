@@ -61,7 +61,6 @@ export async function rentVehicle(formData) {
 	try {
 		await dbConnect();
 		if (payload.user === 'none') {
-			// console.log('IT IS');
 			return;
 			// return { error: 'Please choose a user.' };
 		} else {
@@ -78,16 +77,21 @@ export async function rentVehicle(formData) {
 	}
 }
 
-export const returnVehicle = async (transactionId, vehicleId) => {
+export const returnVehicle = async ({ transaction, vehicle }) => {
 	// console.log(transactionId, vehicleId, 'the transactionId, vehicleId');
 	try {
 		await dbConnect();
-		await Vehicle.updateOne({ _id: vehicleId }, { user: 'none', inUse: false });
+		await Vehicle.updateOne({ _id: vehicle }, { user: 'none', inUse: false });
 		await Transaction.updateOne(
-			{ _id: transactionId },
+			{ _id: transaction },
 			{ status: 'complete', returnTime: new Date() }
 		);
 		revalidatePath('/', 'page');
+		return {
+			error: {
+				returnVehicle: '',
+			},
+		};
 	} catch (error) {
 		console.log('returnVehicle error:', error);
 		throw Error('Could not insert transaction to database: ' + error);
@@ -96,15 +100,12 @@ export const returnVehicle = async (transactionId, vehicleId) => {
 
 export const makeReservation = async (formData) => {
 	// Ова ќе треба да се усогласи со серверот.
-	// console.log(formData);
 	let setTimeDate = new Date();
 	setTimeDate.setHours(
 		Number(formData.get('hour')),
 		Number(formData.get('minutes'))
 	);
-	// setTimeDate.setMinutes(formData.get('minutes'));
 
-	// console.log(setTimeDate);
 	const payload = {
 		user: formData.get('userId'),
 		vehicle: formData.get('vehicleId'),

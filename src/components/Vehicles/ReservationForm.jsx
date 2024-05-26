@@ -11,7 +11,7 @@ const minutes = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
 const ReservationForm = ({ vehicles, users, locations }) => {
 	return (
-		<form action={makeReservation}>
+		<form action={makeReservation} className='flex flex-col gap-4'>
 			<select
 				name='vehicleId'
 				className='w-[250px] self-end border-2 border-grey-50 border-opacity-60 rounded px-2 py-[1px] hover:border-red-200 focus:outline-none cursor-pointer'>

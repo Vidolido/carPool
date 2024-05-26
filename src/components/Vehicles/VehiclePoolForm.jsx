@@ -1,15 +1,16 @@
 import { rentVehicle } from '@/serverActions/vehicles';
 import SubmitButton from '../Buttons/SubmitButton';
+import VehicleError from '../Errors/VehicleError';
 
 const VehiclePoolForm = ({ poolVehicles, users, locations }) => {
 	return (
-		<form action={rentVehicle} className='flex gap-4'>
+		<form action={rentVehicle} className='flex flex-col gap-4'>
 			{poolVehicles.length === 0 ? (
 				<p>There are no vehicles available.</p>
 			) : (
 				<select
 					name='vehicleId'
-					className='w-[250px] self-end border-2 border-grey-50 border-opacity-60 rounded px-2 py-[1px] hover:border-red-200 focus:outline-none cursor-pointer'>
+					className='w-full min-w-[200px] self-end border-2 border-grey-50 border-opacity-60 rounded px-2 py-[1px] hover:border-red-200 focus:outline-none cursor-pointer'>
 					{poolVehicles.map((vehicle) => {
 						return (
 							<option key={vehicle._id} value={vehicle._id}>
@@ -25,7 +26,7 @@ const VehiclePoolForm = ({ poolVehicles, users, locations }) => {
 				<>
 					<select
 						name='userId'
-						className='w-[250px] self-end border-2 border-grey-50 border-opacity-60 rounded px-2 py-[1px] hover:border-red-200 focus:outline-none cursor-pointer'>
+						className='w-full min-w-[200px] self-end border-2 border-grey-50 border-opacity-60 rounded px-2 py-[1px] hover:border-red-200 focus:outline-none cursor-pointer'>
 						<option value='none'>--</option>
 						{users.map((user) => {
 							return (
@@ -37,7 +38,7 @@ const VehiclePoolForm = ({ poolVehicles, users, locations }) => {
 					</select>
 					<select
 						name='location'
-						className='w-[250px] self-end border-2 border-grey-50 border-opacity-60 rounded px-2 py-[1px] hover:border-red-200 focus:outline-none cursor-pointer'>
+						className='w-full min-w-[200px] self-end border-2 border-grey-50 border-opacity-60 rounded px-2 py-[1px] hover:border-red-200 focus:outline-none cursor-pointer'>
 						{locations.map((location) => {
 							return (
 								<option key={location} value={location}>
@@ -46,6 +47,8 @@ const VehiclePoolForm = ({ poolVehicles, users, locations }) => {
 							);
 						})}
 					</select>
+					<VehicleError errorFrom='useVehicle' />
+
 					<SubmitButton label='Use' element='userId' />
 				</>
 			)}

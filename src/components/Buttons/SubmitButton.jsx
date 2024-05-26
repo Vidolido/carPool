@@ -22,6 +22,7 @@ const SubmitButton = ({ label, element }) => {
 	}, [element, setState]);
 
 	const handleClick = async (e) => {
+		e.preventDefault();
 		const checkValue = e.target.form.elements?.namedItem(element)
 			? e.target.form.elements?.namedItem(element)
 			: null;
@@ -67,6 +68,7 @@ const SubmitButton = ({ label, element }) => {
 			);
 
 			if (hasUserRented) {
+				console.log('THIS IS THE IT');
 				setState((prevState) => ({
 					...prevState,
 					error: {
